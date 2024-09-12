@@ -287,6 +287,10 @@ from robocasa.environments.kitchen.single_stage.kitchen_stove import (
     TurnOnStove,
 )
 
+from robocasa.environments.kitchen.single_stage.kitchen_move_chair import (
+    MoveChairSinkToCounter
+)
+
 try:
     import mimicgen
 except ImportError:
