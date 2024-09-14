@@ -6,7 +6,8 @@ from collections import OrderedDict
 import numpy as np
 import robosuite
 from robosuite import load_controller_config
-from robosuite.wrappers import VisualizationWrapper
+from robosuite.controllers.config import osc_pose
+# from robosuite.wrappers import VisualizationWrapper
 from termcolor import colored
 
 from robocasa.models.scenes.scene_registry import LayoutType, StyleType
@@ -90,7 +91,8 @@ if __name__ == "__main__":
     config = {
         "env_name": args.task,
         "robots": "PandaMobile",
-        "controller_configs": load_controller_config(default_controller="OSC_POSE"),
+        #"controller_configs": load_controller_config(default_controller="OSC_POSE"),
+        "controller_configs": osc_pose,
         "translucent_robot": False,
     }
 
