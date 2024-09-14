@@ -30,22 +30,6 @@ OBJ_CATEGORIES = dict(
             scale=1.35,
         ),
     ),
-    chair=dict(
-        types=("furniture"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        aigen=dict(
-            model_folders=["aigen_objs/chair"],
-            scale=1.50,
-        ),
-        objaverse=dict(
-            model_folders=["objaverse/chair"],
-            scale=1.35,
-        ),
-    ),
     apple=dict(
         types=("fruit"),
         graspable=True,
