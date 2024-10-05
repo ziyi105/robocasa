@@ -403,3 +403,16 @@ island_group:
   #       size: [0.40, 0.40]
   #       # pos: [null, 1.0]
   #       rotation: [0, 0]
+
+  chairs:
+    - name: stool_1
+      type: stool
+
+      # place flush to ground
+      pos: [-0.65, 1.6, 0.5]
+
+    - name: stool_3
+      type: stool
+
+      # place flush to ground
+      pos: [0.65, 1.6, 0.5]
