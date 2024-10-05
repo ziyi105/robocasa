@@ -652,6 +652,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                 raise ValueError
 
             placement = cfg.get("placement", None)
+            offset = cfg.get("offset", None)
             if placement is None:
                 continue
             fixture_id = placement.get("fixture", None)
@@ -661,76 +662,99 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     id=fixture_id,
                     ref=placement.get("ref", None),
                 )
+                if offset is None:
+                    # calculate the total available space where object could be placed
+                    sample_region_kwargs = placement.get("sample_region_kwargs", {})
+                    reset_region = fixture.sample_reset_region(
+                        env=self, **sample_region_kwargs
+                    )
+                    outer_size = reset_region["size"]
+                    margin = placement.get("margin", 0.04)
+                    outer_size = (outer_size[0] - margin, outer_size[1] - margin)
 
-                # calculate the total available space where object could be placed
-                sample_region_kwargs = placement.get("sample_region_kwargs", {})
-                reset_region = fixture.sample_reset_region(
-                    env=self, **sample_region_kwargs
-                )
-                outer_size = reset_region["size"]
-                margin = placement.get("margin", 0.04)
-                outer_size = (outer_size[0] - margin, outer_size[1] - margin)
-
-                # calculate the size of the inner region where object will actually be placed
-                target_size = placement.get("size", None)
-                if target_size is not None:
-                    target_size = deepcopy(list(target_size))
-                    for size_dim in [0, 1]:
-                        if target_size[size_dim] == "obj":
-                            target_size[size_dim] = mj_obj.size[size_dim] + 0.005
-                        if target_size[size_dim] == "obj.x":
-                            target_size[size_dim] = mj_obj.size[0] + 0.005
-                        if target_size[size_dim] == "obj.y":
-                            target_size[size_dim] = mj_obj.size[1] + 0.005
-                    inner_size = np.min((outer_size, target_size), axis=0)
-                else:
-                    inner_size = outer_size
-
-                inner_xpos, inner_ypos = placement.get("pos", (None, None))
-                offset = placement.get("offset", (0.0, 0.0))
-
-                # center inner region within outer region
-                if inner_xpos == "ref":
-                    # compute optimal placement of inner region to match up with the reference fixture
-                    x_halfsize = outer_size[0] / 2 - inner_size[0] / 2
-                    if x_halfsize == 0.0:
-                        inner_xpos = 0.0
+                    # calculate the size of the inner region where object will actually be placed
+                    target_size = placement.get("size", None)
+                    if target_size is not None:
+                        target_size = deepcopy(list(target_size))
+                        for size_dim in [0, 1]:
+                            if target_size[size_dim] == "obj":
+                                target_size[size_dim] = mj_obj.size[size_dim] + 0.005
+                            if target_size[size_dim] == "obj.x":
+                                target_size[size_dim] = mj_obj.size[0] + 0.005
+                            if target_size[size_dim] == "obj.y":
+                                target_size[size_dim] = mj_obj.size[1] + 0.005
+                        inner_size = np.min((outer_size, target_size), axis=0)
                     else:
-                        ref_fixture = self.get_fixture(
-                            placement["sample_region_kwargs"]["ref"]
-                        )
-                        ref_pos = ref_fixture.pos
-                        fixture_to_ref = OU.get_rel_transform(fixture, ref_fixture)[0]
-                        outer_to_ref = fixture_to_ref - reset_region["offset"]
-                        inner_xpos = outer_to_ref[0] / x_halfsize
-                        inner_xpos = np.clip(inner_xpos, a_min=-1.0, a_max=1.0)
-                elif inner_xpos is None:
-                    inner_xpos = 0.0
+                        inner_size = outer_size
 
-                if inner_ypos is None:
-                    inner_ypos = 0.0
-                # offset for inner region
-                intra_offset = (
-                    (outer_size[0] / 2 - inner_size[0] / 2) * inner_xpos + offset[0],
-                    (outer_size[1] / 2 - inner_size[1] / 2) * inner_ypos + offset[1],
-                )
+                    inner_xpos, inner_ypos = placement.get("pos", (None, None))
+                    offset = placement.get("offset", (0.0, 0.0))
 
-                # center surface point of entire region
-                ref_pos = fixture.pos + [0, 0, reset_region["offset"][2]]
-                ref_rot = fixture.rot
+                    # center inner region within outer region
+                    if inner_xpos == "ref":
+                        # compute optimal placement of inner region to match up with the reference fixture
+                        x_halfsize = outer_size[0] / 2 - inner_size[0] / 2
+                        if x_halfsize == 0.0:
+                            inner_xpos = 0.0
+                        else:
+                            ref_fixture = self.get_fixture(
+                                placement["sample_region_kwargs"]["ref"]
+                            )
+                            ref_pos = ref_fixture.pos
+                            fixture_to_ref = OU.get_rel_transform(fixture, ref_fixture)[0]
+                            outer_to_ref = fixture_to_ref - reset_region["offset"]
+                            inner_xpos = outer_to_ref[0] / x_halfsize
+                            inner_xpos = np.clip(inner_xpos, a_min=-1.0, a_max=1.0)
+                    elif inner_xpos is None:
+                        inner_xpos = 0.0
 
-                # x, y, and rotational ranges for randomization
-                x_range = (
-                    np.array([-inner_size[0] / 2, inner_size[0] / 2])
-                    + reset_region["offset"][0]
-                    + intra_offset[0]
-                )
-                y_range = (
-                    np.array([-inner_size[1] / 2, inner_size[1] / 2])
-                    + reset_region["offset"][1]
-                    + intra_offset[1]
-                )
-                rotation = placement.get("rotation", np.array([-np.pi / 4, np.pi / 4]))
+                    if inner_ypos is None:
+                        inner_ypos = 0.0
+                    # offset for inner region
+                    intra_offset = (
+                        (outer_size[0] / 2 - inner_size[0] / 2) * inner_xpos + offset[0],
+                        (outer_size[1] / 2 - inner_size[1] / 2) * inner_ypos + offset[1],
+                    )
+
+                    # center surface point of entire region
+                    ref_pos = fixture.pos + [0, 0, reset_region["offset"][2]]
+                    ref_rot = fixture.rot
+
+                    # x, y, and rotational ranges for randomization
+                    x_range = (
+                        np.array([-inner_size[0] / 2, inner_size[0] / 2])
+                        + reset_region["offset"][0]
+                        + intra_offset[0]
+                    )
+                    y_range = (
+                        np.array([-inner_size[1] / 2, inner_size[1] / 2])
+                        + reset_region["offset"][1]
+                        + intra_offset[1]
+                    )
+                    rotation = placement.get("rotation", np.array([-np.pi / 4, np.pi / 4]))
+                else:
+                    # offset is not none
+                    # Calculate the position of the stool relative to the fixture
+                    ref_pos = [0, 0, 0]
+                    ref_rot = fixture.rot
+                    fixture_pos = self.get_fixture(id=fixture_id).pos
+
+                    # Apply the offset to the fixture's position to place the stool
+                    ref_pos[0] = fixture_pos[0] + offset[0]  # x-axis offset
+                    ref_pos[1] = fixture_pos[1] + offset[1]  # y-axis offset
+                    ref_pos[2] = fixture_pos[2] + offset[2]  # z-axis offset (if needed)
+
+                    # Set the rotation of the stool (could be default or taken from placement config)
+                    rotation = placement.get("rotation", np.array([-np.pi / 4, np.pi / 4]))
+
+                    target_size = placement.get("size", None)
+                    if target_size is not None:
+                        x_range = np.array([-target_size[0] / 2, target_size[0] / 2])
+                        y_range = np.array([-target_size[1] / 2, target_size[1] / 2])
+                    else:
+                        # Default ranges if size is not provided
+                        x_range = np.array([-0.1, 0.1])
+                        y_range = np.array([-0.1, 0.1])
             else:
                 target_size = placement.get("size", None)
                 x_range = np.array([-target_size[0] / 2, target_size[0] / 2])

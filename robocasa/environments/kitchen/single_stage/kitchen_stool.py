@@ -49,7 +49,7 @@ class MoveStoolFromSinkToCounter(MoveStool):
             "counter",
             dict(id=FixtureType.COUNTER),
         )
-        self.init_robot_base_pos = self.sink
+        self.init_robot_base_pos = self.counter
 
     def get_ep_meta(self):
         """
@@ -87,12 +87,13 @@ class MoveStoolFromSinkToCounter(MoveStool):
                 placement=dict(
                     fixture=self.sink,
                     sample_region_kwargs=dict(
-                        ref=self.counter,
+                        ref=self.sink,
                         loc="left_right",
                     ),
                     size=(0.30, 0.40), # increase the size?
-                    pos=("ref", -1.0),
+                    pos=(self.sink.pos, 0),
                 ),
+                offset = (0, 1, 0),
             )
         )
 
