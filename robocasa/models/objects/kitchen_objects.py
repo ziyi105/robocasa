@@ -1297,6 +1297,17 @@ OBJ_CATEGORIES = dict(
         freezable=False,
         types=("tool"),
     ),
+    stool=dict(
+        types=("furniture"),
+        graspable=True,
+        washable=True,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse=dict(
+            model_folders=["objaverse/stool"],
+        ),
+    ),
     syrup_bottle=dict(
         aigen=dict(
             scale=1.35,
