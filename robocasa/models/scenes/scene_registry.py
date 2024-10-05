@@ -19,6 +19,7 @@ class LayoutType(IntEnum):
     G_SHAPED_SMALL = 7
     G_SHAPED_LARGE = 8
     WRAPAROUND = 9
+    ONE_WALL_LARGE_MESSY_ARENA = 10
 
     # negative values correspond to groups (see LAYOUT_GROUPS_TO_IDS)
     ALL = -1
@@ -28,10 +29,10 @@ class LayoutType(IntEnum):
 
 
 LAYOUT_GROUPS_TO_IDS = {
-    -1: list(range(10)),  # all
+    -1: list(range(11)),  # all
     -2: [0, 2, 4, 5, 7],  # no island
-    -3: [1, 3, 6, 8, 9],  # island
-    -4: [1, 3, 6, 7, 8, 9],  # dining
+    -3: [1, 3, 6, 8, 9, 10],  # island
+    -4: [1, 3, 6, 7, 8, 9, 10],  # dining
 }
 
 
