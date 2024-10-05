@@ -133,9 +133,12 @@ robocasa/models/assets/fixtures/**/*.blend1
 robocasa/models/assets/fixtures/**/*.mp4
 robocasa/models/assets/fixtures/**/*.png
 robocasa/models/assets/fixtures/**/*.jpeg
+robocasa/models/assets/fixtures/**/*.xml
 
 # default textures
 robocasa/models/assets/textures
 
 # midjourney-generated textures
 robocasa/models/assets/generative_textures
+
+*.xml
