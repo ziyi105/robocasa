@@ -23,7 +23,7 @@ class MoveStool(Kitchen):
 
 class MoveStoolFromSinkToCounter(MoveStool):
     """
-    Class encapsulating the atomic sink to counter move Stool task
+    Class encapsulating the atomic sink to counter move stool task
 
     Args:
         cab_id (str): The counter fixture id to place the object.

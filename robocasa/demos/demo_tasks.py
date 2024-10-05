@@ -97,6 +97,7 @@ if __name__ == "__main__":
             ("RestockPantry", "restock cans in pantry"),
             ("PreSoakPan", "prepare pan for washing"),
             ("PrepareCoffee", "make coffee"),
+            ("MoveStoolToCounter", "move stool from sink to counter"),
         ]
     )
 
