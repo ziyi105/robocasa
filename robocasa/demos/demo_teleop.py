@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # Arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", type=str, help="task (choose among 100+ tasks)")
-    parser.add_argument("--layout", type=int, help="kitchen layout (choose number 0-9)")
+    parser.add_argument("--layout", type=int, default=10, help="kitchen layout (choose number 0-10)")
     parser.add_argument("--style", type=int, help="kitchen style (choose number 0-11)")
     parser.add_argument(
         "--device", type=str, default="keyboard", choices=["keyboard", "spacemouse"]

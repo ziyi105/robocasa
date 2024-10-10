@@ -19,7 +19,7 @@ class LayoutType(IntEnum):
     G_SHAPED_SMALL = 7
     G_SHAPED_LARGE = 8
     WRAPAROUND = 9
-    ONE_WALL_LARGE_MESSY_ARENA = 10
+    ONE_WALL_LARGE_MESSY = 10
 
     # negative values correspond to groups (see LAYOUT_GROUPS_TO_IDS)
     ALL = -1

@@ -383,6 +383,7 @@ class UniformRandomSampler(ObjectPositionSampler):
                     px=region_points[1],
                     py=region_points[2],
                 ):
+                    # print("Object is out of the valid placement region")
                     location_valid = False
                     continue
 
@@ -397,6 +398,7 @@ class UniformRandomSampler(ObjectPositionSampler):
                             other_obj_pos=[x, y, z],
                             other_obj_quat=convert_quat(other_quat, to="xyzw"),
                         ):
+                            # print(f"Object intersects with {other_obj.name}, position of {other_obj.name}: {x, y, z}")
                             location_valid = False
                             break
 
