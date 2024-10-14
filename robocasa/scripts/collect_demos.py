@@ -14,7 +14,6 @@ import time
 from glob import glob
 
 import h5py
-import imageio
 import mujoco
 import numpy as np
 import robosuite as suite
