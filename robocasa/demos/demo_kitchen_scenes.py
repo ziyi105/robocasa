@@ -1,6 +1,5 @@
 import argparse
 import json
-import time
 from collections import OrderedDict
 
 import numpy as np

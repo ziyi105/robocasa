@@ -409,10 +409,22 @@ island_group:
       type: stool
 
       # place flush to ground
-      pos: [-0.65, 1.6, 0.5]
+      pos: [2.5, 1, 0.5]
+      
+    - name: stool_2
+      type: stool
+
+      # place flush to ground
+      pos: [2.5, 0.2, 0.5]
 
     - name: stool_3
       type: stool
 
       # place flush to ground
-      pos: [0.65, 1.6, 0.5]
+      pos: [3.2, 1, 0.5]
+
+    - name: stool_4
+      type: stool
+
+      # place flush to ground
+      pos: [2.5, 1.8, 0.5]

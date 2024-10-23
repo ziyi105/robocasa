@@ -71,52 +71,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    tasks = OrderedDict(
-        [
-            ("PnPCounterToCab", "pick and place from counter to cabinet"),
-            ("PnPCounterToSink", "pick and place from counter to sink"),
-            ("PnPMicrowaveToCounter", "pick and place from microwave to counter"),
-            ("PnPStoveToCounter", "pick and place from stove to counter"),
-            ("OpenSingleDoor", "open cabinet or microwave door"),
-            ("CloseDrawer", "close drawer"),
-            ("TurnOnMicrowave", "turn on microwave"),
-            ("TurnOnSinkFaucet", "turn on sink faucet"),
-            ("TurnOnStove", "turn on stove"),
-            ("ArrangeVegetables", "arrange vegetables on a cutting board"),
-            ("MicrowaveThawing", "place frozen food in microwave for thawing"),
-            ("RestockPantry", "restock cans in pantry"),
-            ("PreSoakPan", "prepare pan for washing"),
-            ("PrepareCoffee", "make coffee"),
-            ("MoveStoolFromSinkToCounter", "move stool from sink to counter"),
-        ]
-    )
-
-    raw_layouts = dict(
-        map(lambda item: (item.value, item.name.lower().capitalize()), LayoutType)
-    )
-    layouts = OrderedDict()
-    for k in sorted(raw_layouts.keys()):
-        if k < -0:
-            continue
-        layouts[k] = raw_layouts[k]
-
-    raw_styles = dict(
-        map(lambda item: (item.value, item.name.lower().capitalize()), StyleType)
-    )
-    styles = OrderedDict()
-    for k in sorted(raw_styles.keys()):
-        if k < 0:
-            continue
-        styles[k] = raw_styles[k]
-
-    if args.task is None:
-        args.task = choose_option(
-            tasks, "task", default="PnPCounterToCab", show_keys=True
-        )
-
     # Create argument configuration
     config = {
-        "env_name": args.task,
+        "env_name": "MoveStoolFromSinkToCounter",
         "robots": "PandaMobile",
         "controller_configs": load_controller_config(default_controller="OSC_POSE"),
         "translucent_robot": True,

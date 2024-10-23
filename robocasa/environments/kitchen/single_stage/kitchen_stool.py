@@ -49,6 +49,10 @@ class MoveStoolFromSinkToCounter(MoveStool):
             "counter",
             dict(id=FixtureType.COUNTER),
         )
+        # self.island = self.register_fixture_ref(
+        #     "island",
+        #     dict(id=FixtureType.ISLAND),
+        # )
         self.init_robot_base_pos = self.counter
 
     def get_ep_meta(self):
@@ -79,7 +83,7 @@ class MoveStoolFromSinkToCounter(MoveStool):
         cfgs = []
         cfgs.append(
             dict(
-                name="stool",
+                name="stool_1",
                 obj_groups=self.obj_groups,
                 exclude_obj_groups=self.exclude_obj_groups,
                 graspable=True,
@@ -93,9 +97,31 @@ class MoveStoolFromSinkToCounter(MoveStool):
                     size=(0.30, 0.40), # increase the size?
                     pos=(self.sink.pos, 0),
                 ),
-                offset = (0, 1, 0),
+                offset = (0, 1, 0), 
             )
         )
+
+        # cfgs.append(
+        #     dict(
+        #         name="stool_2",
+        #         obj_groups=self.obj_groups,
+        #         exclude_obj_groups=self.exclude_obj_groups,
+        #         graspable=True,
+        #         washable=True,
+        #         placement=dict(
+        #             fixture=self.island,
+        #             sample_region_kwargs=dict(
+        #                 ref=self.island,
+        #                 loc="left_right",
+        #             ),
+        #             size=(1, 1), # increase the size?
+        #             pos=(1.2, 0.45),
+        #             ensure_object_in_region=True,
+        #             ensure_valid_placement=True,
+        #         ),
+        #         # offset = (1.6, 0.7, 0.5),
+        #     )
+        # )
 
         return cfgs
 
@@ -109,7 +135,7 @@ class MoveStoolFromSinkToCounter(MoveStool):
         """
         # Retrieve the position and orientation of the stool
         # print("Available body names:", self.sim.model.body_names)
-        stool = self.sim.model.body_name2id("stool_main")
+        stool = self.sim.model.body_name2id("stool_1_main")
         obj_pos = self.sim.data.body_xpos[stool]
         obj_quat = self.sim.data.body_xquat[stool]
 
@@ -118,7 +144,7 @@ class MoveStoolFromSinkToCounter(MoveStool):
 
         # Use obj_in_region to check if the stool is within this region
         Stool_near_counter = OU.obj_in_region(
-            obj=self.objects["stool"],
+            obj=self.objects["stool_1"],
             obj_pos=obj_pos,
             obj_quat=obj_quat,
             p0=p0,
